@@ -2,15 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Camera } from 'expo-camera';
+import * as ImagePicker from 'expo-image-picker'; 
 import CameraScreen from './components/CameraScreen';
 import Leaderboard from './components/Leaderboard';
+import { View } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [hasPermission, setHasPermission] = useState(null);
   const [points, setPoints] = useState(0);
+  const [photo, setPhoto] = useState(null);
 
   // Load saved points
   useEffect(() => {
@@ -22,13 +24,15 @@ export default function App() {
 
   // Save points
   useEffect(() => {
-    AsyncStorage.setItem('points', points.toString());
+    (async () => {
+      await AsyncStorage.setItem('points', points.toString());
+    })();
   }, [points]);
 
   // Request camera permissions
   useEffect(() => {
     (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
       setHasPermission(status === 'granted');
     })();
   }, []);
@@ -39,7 +43,7 @@ export default function App() {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen name="Camera">
-          {() => <CameraScreen points={points} setPoints={setPoints} />}
+          {() => <CameraScreen points={points} setPoints={setPoints} photo={photo} setPhoto={setPhoto} />}
         </Tab.Screen>
         <Tab.Screen name="Leaderboard">
           {() => <Leaderboard points={points} />}

@@ -3,11 +3,11 @@ import { View, Text } from 'react-native';
 import { styles } from '../utils/styles';
 
 export default function Leaderboard({ points }) {
-  const [users] = React.useState([
+  const users = [
     { name: 'You', points: points },
     { name: 'Jane', points: 80 },
     { name: 'Alex', points: 50 },
-  ]);
+  ];
 
   return (
     <View style={styles.container}>
