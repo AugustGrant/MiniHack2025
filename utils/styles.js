@@ -23,4 +23,9 @@ export const styles = StyleSheet.create({
     width: '80%',
     padding: 10,
   },
+  cameraPreview: {
+    width: 300,
+    height: 300,
+    marginBottom: 20,
+  }
 });
